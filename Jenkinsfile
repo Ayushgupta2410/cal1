@@ -10,7 +10,7 @@ pipeline {
 
         stage('Checkout') {
             steps {
-                git 'https://github.com/jehantech/calcTEST.git'
+                git 'https://github.com/Ayushgupta2410/cal1.git'
             }
         }
 
