@@ -2,17 +2,11 @@ pipeline {
     agent any
 
     tools {
+        maven 'Maven3'
         jdk 'JDK17'
-        maven 'Maven'
     }
 
     stages {
-
-        stage('Checkout') {
-            steps {
-                git branch: 'main', url: 'https://github.com/Ayushgupta2410/cal1.git'
-            }
-        }
 
         stage('Build') {
             steps {
@@ -25,19 +19,30 @@ pipeline {
                 bat 'mvn test'
             }
         }
+
+        stage('Package') {
+            steps {
+                bat 'mvn package'
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                bat '''
+                if not exist C:\\Deployments mkdir C:\\Deployments
+                copy target\\CalculatorApp-1.0.jar C:\\Deployments
+                '''
+            }
+        }
     }
 
     post {
-        always {
-            junit '**/target/surefire-reports/*.xml'
-        }
-
         success {
-            echo 'Build Successful!'
+            echo 'Application deployed successfully!'
         }
 
         failure {
-            echo 'Build Failed!'
+            echo 'Deployment failed.'
         }
     }
 }
